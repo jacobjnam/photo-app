@@ -1,0 +1,56 @@
+/* ========================== NAVBAR STUFF ========================== */
+nav.top-nav {
+    border: solid 1px black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+}
+
+nav.top-nav div {
+    margin: 10px;
+}
+
+#navbar-logo {
+    border: solid 1px black;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+}
+
+#navbar-rightside {
+    border: solid 1px blue;
+
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#navbar-rightside div {
+    margin: 5px;
+}
+
+#navbar-username {
+    border: solid 1px green;
+
+    /* margin: 5px; */
+}
+
+#navbar-signout {
+    border: solid 1px red;
+
+    color: rgb(46, 189, 255);
+    /* margin: 5px; */
+}
+
+/* ========================== STUFF ========================== */
+main {
+    margin-top: 70px;
+}
+
+#suggestions-list {
+    list-style: none;
+}
