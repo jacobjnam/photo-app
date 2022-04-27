@@ -1,0 +1,18 @@
+<aside class="recommendations">
+    <div id="current-user"><img src="{{ user.profile_url }}" alt="Current user profile picture">{{ user.username }}</div>
+    <section id="rec-cards">
+        <h2 id="suggestions-for-you">Suggestions for you</h2>
+        <section id="suggestions-list">
+            {% for suggested_user in suggestions %}
+            <div class="suggestion-card">
+                <img src="{{ suggested_user.profile_url }}" alt="{{ suggested_user.username }}'s profile picture">
+                <div class="suggested-user">
+                    <p class="suggested-username">{{ suggested_user.username }}</p>
+                    <p class="suggested-for-you"> suggested for you</p>
+                </div>
+                <a href="">follow</a>
+            </div>
+            {% endfor %}
+        </section>
+    </section>
+</aside>

@@ -13,9 +13,18 @@ button {
     border: none;
 }
 
+a {
+    color: rgb(20, 108, 138);
+    text-decoration: none;
+}
+
 #current-user, #top-nav, .post-header {
     font-family: 'Comfortaa', sans-serif;
 }
+
+/* img {
+    display: none;
+} */
 /* ========================== NAVBAR STUFF ========================== */
 #top-nav {
     border-bottom: solid 1px black;
@@ -30,7 +39,7 @@ button {
     background-color: white;
 }
 
-#top-nav div {
+#top-nav * {
     margin: 10px;
 }
 
@@ -56,6 +65,7 @@ main {
     margin-top: 100px;
     margin-left: 50px;
     margin-right: 50px;
+    max-width: 450px;
     display: grid;
     justify-content: space-between;
 }
@@ -84,7 +94,7 @@ main {
 
 #suggestions-for-you {
     font-weight: bold;
-    color: gray;
+    color: rgb(70, 70, 70);
     font-size: 18px;
 }
 
@@ -104,24 +114,19 @@ main {
     padding: 5px;
 }
 
-.suggestion-card a {
-    text-decoration: none;
-}
-
 .suggestion-card .suggested-username {
     font-weight: bold;
 }
 
 .suggested-for-you {
-    color: gray;
+    color: rgb(70, 70, 70);
     font-size: 14px;
 }
 
 /* ========================== STORIES STUFF ========================== */
 #stories {
-    border: 1px solid black;
-
     display: flex;
+    /* max-width: 100%; */
     overflow-x: scroll;
 }
 
@@ -130,19 +135,18 @@ main {
 }
 
 .story {
-    border: 1px solid black;
-
     margin: 10px;
     justify-content: center;
 }
 
 .story img {
+    border: double 3px rgb(185, 185, 185);
     display: flex;
     border-radius: 50%;
 }
 
 .story-username {
-    color: gray;
+    color: rgb(70, 70, 70);
     text-align: center;
     font-size: 12px;
 }

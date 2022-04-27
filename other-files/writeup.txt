@@ -1,0 +1,11 @@
+What corrections did you have to make?
+For the alternative text under profile pictures, I had a generic statement that said something like "suggested user's profile picture." WAVE marked this as repetitive, as all profile pictures under the suggested users section had the same alt text. I changed this to be "{{ suggested_user.user.username }}'s profile picture" for clarity. I also had low contrast on some of my text (i.e. the Sign out, follow, and more buttons), so I made them a darker color to contrast more with the background.
+
+Given that the photos and captions rely on user-generated content, do you think that the accessibility problems are all solvable? Why or why not?
+Since stories had a field called "title," I was able to use that text for the alt text of the story. However, any alt text would have to be provided by the original poster, so accessibility of each post is limited to the consideration of the OP.
+
+Do you think your website is usable if you turn off the CSS? Why or why not?
+The website is generally pretty usable in terms of looking at pictures and seeing captions and comments. However, the individual sections (i.e. stories and posts) are not labeled, so it is difficult to know what they are for without any styling.
+
+Do you think your website is usable if you turn off the images? Why or why not?
+The website is usuable, however it loses its main functionality of being a photo-sharing website. As mentioned before, it would be difficult to rely on alt text alone, as it is limited by the conscientiousness of the OP.

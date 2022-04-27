@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Photo App</title>
+        <link rel="stylesheet" href="/static/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        {% include 'includes/navbar.html' %}
+
+        <main>
+            <!-- ================ STORIES ================ -->
+            {% include 'includes/stories.html' %}
+            <!-- ================ POSTS ================ -->
+            {% include 'includes/cards.html' %}
+
+            <!-- THIS IS THE RECOMMENDATIONS PANEL (HIDDEN ON MOBILE) -->
+            {% include 'includes/suggestions.html' %}
+        </main>
+    </body>
+    <!-- The user should be able to edit the alt text for their post image by pressing the Options button (ellipsis at top of post) and adding/editing alt text. I'd imagine that this would consist of some Javascript/Flask to edit this HTML file to include alt text. -->
+</html>
