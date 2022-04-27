@@ -1,6 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(241, 241, 241);
+}
+
+#stories, .post {
+    background-color: white;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+#current-user, #top-nav, .post-header {
+    font-family: 'Comfortaa', sans-serif;
+}
 /* ========================== NAVBAR STUFF ========================== */
-nav.top-nav {
-    border: solid 1px black;
+#top-nav {
+    border-bottom: solid 1px black;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -8,49 +26,194 @@ nav.top-nav {
     top: 0;
     left: 0;
     width: 100%;
+    height: 80px;
     background-color: white;
 }
 
-nav.top-nav div {
+#top-nav div {
     margin: 10px;
 }
 
 #navbar-logo {
-    border: solid 1px black;
-
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
 }
 
 #navbar-rightside {
-    border: solid 1px blue;
-
     display: flex;
     justify-content: space-evenly;
 }
 
-#navbar-rightside div {
-    margin: 5px;
-}
-
-#navbar-username {
-    border: solid 1px green;
-
-    /* margin: 5px; */
+#navbar-rightside * {
+    margin: 10px;
 }
 
 #navbar-signout {
-    border: solid 1px red;
-
-    color: rgb(46, 189, 255);
-    /* margin: 5px; */
+    text-decoration: none;
 }
 
-/* ========================== STUFF ========================== */
+/* ========================== RECOMMENDATION PANEL STUFF ========================== */
 main {
-    margin-top: 70px;
+    margin-top: 100px;
+    margin-left: 50px;
+    margin-right: 50px;
+    display: grid;
+    justify-content: space-between;
 }
 
-#suggestions-list {
-    list-style: none;
+.recommendations {
+    width: 300px;
+    margin-right: 20px;
+    padding: 20px;
+    position: fixed;
+    right: 0;
+}
+
+#current-user {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+}
+
+#current-user * {
+    padding: 10px;
+}
+
+#current-user img {
+    border-radius: 50%;
+}
+
+#suggestions-for-you {
+    font-weight: bold;
+    color: gray;
+    font-size: 18px;
+}
+
+.suggestion-card {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.suggestion-card img {
+    border-radius: 50%;
+}
+
+.suggestion-card .suggested-user * {
+    margin: 0;
+    padding: 5px;
+}
+
+.suggestion-card a {
+    text-decoration: none;
+}
+
+.suggestion-card .suggested-username {
+    font-weight: bold;
+}
+
+.suggested-for-you {
+    color: gray;
+    font-size: 14px;
+}
+
+/* ========================== STORIES STUFF ========================== */
+#stories {
+    border: 1px solid black;
+
+    display: flex;
+    overflow-x: scroll;
+}
+
+.story * {
+    margin: 0 auto;
+}
+
+.story {
+    border: 1px solid black;
+
+    margin: 10px;
+    justify-content: center;
+}
+
+.story img {
+    display: flex;
+    border-radius: 50%;
+}
+
+.story-username {
+    color: gray;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* ========================== POSTS STUFF ========================== */
+#posts {
+    margin-top: 20px;
+}
+
+.post {
+    border: 1px solid gray;
+    max-width: 450px;
+    margin-bottom: 30px;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-header * {
+    display: inline;
+    padding: 10px;
+}
+
+.post-body {
+    padding: 10px;
+}
+
+.post img {
+    width: 100%;
+}
+
+.post-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.post-user-info, .post-comment {
+    display: flex;
+}
+
+.post-footer {
+    border-top: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.post-footer-comment {
+    display: flex;
+}
+
+.post-button {
+    text-decoration: none;
+}
+
+/* ========================== MEDIA QUERY STUFF ========================== */
+@media only screen and (max-width: 800px) {
+    aside {
+        display: none;
+    }
+
+    main {
+        justify-content: center;
+    }
+
+    .post {
+        margin-bottom: 50px;
+    }
 }
