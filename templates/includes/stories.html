@@ -1,8 +1,0 @@
-<section id="stories">
-    {% for story in stories %}
-    <div class="story" alt="{{ story.title }}">
-        <img src="{{ story.user.profile_url }}" alt="{{ story.user.username }}'s profile picture">
-        <p class="story-username">{{ story.user.username }}</p>
-    </div>
-    {% endfor %}
-</section>
