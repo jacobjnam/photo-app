@@ -1,14 +1,17 @@
 from flask import Response, request
+import flask
 from flask_restful import Resource
 from models import LikeComment, Comment, db
 from tests.utils import get_authorized_user_ids
 import json
+import flask_jwt_extended
 
 class CommentLikesListEndpoint(Resource):
 
     def __init__(self, current_user):
         self.current_user = current_user
     
+    @flask_jwt_extended.jwt_required()
     def post(self):
         # create a new "like_comment" based on the data posted in the body 
         body = request.get_json()
@@ -39,6 +42,7 @@ class CommentLikesDetailEndpoint(Resource):
     def __init__(self, current_user):
         self.current_user = current_user
     
+    @flask_jwt_extended.jwt_required()
     def delete(self, id):
         # delete "like_comment" where "id"=id
         # print(id)
@@ -57,12 +61,12 @@ def initialize_routes(api):
         CommentLikesListEndpoint, 
         '/api/comments/likes', 
         '/api/comments/likes/', 
-        resource_class_kwargs={'current_user': api.app.current_user}
+        resource_class_kwargs={'current_user': flask_jwt_extended.current_user}
     )
 
     api.add_resource(
         CommentLikesDetailEndpoint, 
         '/api/comments/likes/<int:id>', 
         '/api/comments/likes/<int:id>/',
-        resource_class_kwargs={'current_user': api.app.current_user}
+        resource_class_kwargs={'current_user': flask_jwt_extended.current_user}
     )

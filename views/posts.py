@@ -2,6 +2,7 @@ from flask import Response, request
 from flask_restful import Resource
 from models import Post, db, Following
 from views import get_authorized_user_ids
+import flask_jwt_extended
 
 import json
 
@@ -13,6 +14,7 @@ class PostListEndpoint(Resource):
     def __init__(self, current_user):
         self.current_user = current_user
 
+    @flask_jwt_extended.jwt_required()
     def get(self):
         # get posts created by one of these users:
         args = request.args
@@ -26,8 +28,9 @@ class PostListEndpoint(Resource):
         user_ids = get_authorized_user_ids(self.current_user)
 
         posts = Post.query.filter(Post.user_id.in_(user_ids)).limit(limit).all()
-        return Response(json.dumps([post.to_dict() for post in posts]), mimetype="application/json", status=200)
+        return Response(json.dumps([post.to_dict(user=self.current_user) for post in posts]), mimetype="application/json", status=200)
 
+    @flask_jwt_extended.jwt_required()
     def post(self):
         # create a new post based on the data posted in the body 
         body = request.get_json()
@@ -50,7 +53,7 @@ class PostDetailEndpoint(Resource):
     def __init__(self, current_user):
         self.current_user = current_user
         
-
+    @flask_jwt_extended.jwt_required()
     def patch(self, id):
         # update post based on the data posted in the body 
         body = request.get_json()
@@ -67,6 +70,7 @@ class PostDetailEndpoint(Resource):
         return Response(json.dumps(post.to_dict()), mimetype="application/json", status=200)
 
 
+    @flask_jwt_extended.jwt_required()
     def delete(self, id):
         # delete post where "id"=id
         post = Post.query.get(id)
@@ -79,6 +83,7 @@ class PostDetailEndpoint(Resource):
         return Response(json.dumps({"message": "post id={0} was successfully deleted"}), mimetype="application/json", status=200)
 
 
+    @flask_jwt_extended.jwt_required()
     def get(self, id):
         # get the post based on the id
         post = Post.query.get(id)
@@ -87,16 +92,16 @@ class PostDetailEndpoint(Resource):
         user_ids = get_authorized_user_ids(self.current_user)
         if post.user_id not in user_ids: return Response(json.dumps({"message": "post id id={0} is invalid"}), mimetype="application/json", status=404)
 
-        return Response(json.dumps(post.to_dict()), mimetype="application/json", status=200)
+        return Response(json.dumps(post.to_dict(user=self.current_user)), mimetype="application/json", status=200)
 
 def initialize_routes(api):
     api.add_resource(
         PostListEndpoint, 
         '/api/posts', '/api/posts/', 
-        resource_class_kwargs={'current_user': api.app.current_user}
+        resource_class_kwargs={'current_user': flask_jwt_extended.current_user}
     )
     api.add_resource(
         PostDetailEndpoint, 
         '/api/posts/<int:id>', '/api/posts/<int:id>/',
-        resource_class_kwargs={'current_user': api.app.current_user}
+        resource_class_kwargs={'current_user': flask_jwt_extended.current_user}
     )
