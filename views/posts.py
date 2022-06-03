@@ -26,7 +26,7 @@ class PostListEndpoint(Resource):
         user_ids = get_authorized_user_ids(self.current_user)
 
         posts = Post.query.filter(Post.user_id.in_(user_ids)).limit(limit).all()
-        return Response(json.dumps([post.to_dict() for post in posts]), mimetype="application/json", status=200)
+        return Response(json.dumps([post.to_dict(user=self.current_user) for post in posts]), mimetype="application/json", status=200)
 
     def post(self):
         # create a new post based on the data posted in the body 
@@ -87,7 +87,7 @@ class PostDetailEndpoint(Resource):
         user_ids = get_authorized_user_ids(self.current_user)
         if post.user_id not in user_ids: return Response(json.dumps({"message": "post id id={0} is invalid"}), mimetype="application/json", status=404)
 
-        return Response(json.dumps(post.to_dict()), mimetype="application/json", status=200)
+        return Response(json.dumps(post.to_dict(user=self.current_user)), mimetype="application/json", status=200)
 
 def initialize_routes(api):
     api.add_resource(
