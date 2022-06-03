@@ -94,7 +94,7 @@ const renderComments = post => {
     if (post.comments.length > 0) {
         comment += `
             <div class="post-comment">
-                <p><b>${ post.comments[comments.length-1].user.username }</b> ${ post.comments[comments.length-1].text }</p>
+                <p><b>${ post.comments[post.comments.length-1].user.username }</b> ${ post.comments[post.comments.length-1].text }</p>
             </div>
         `;
     }
