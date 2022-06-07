@@ -81,6 +81,51 @@ aside {
     height: calc(100vh - 100px);
     padding-left: 30px;
 }
+
+#user-profile div {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    /* font-size: 24px; */
+}
+
+#user-profile * {
+    padding: 10px;
+}
+
+#user-profile img {
+    border-radius: 50%;
+}
+
+#user-profile h2 {
+    font-size: 24px;
+}
+
+.suggestion-card {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.suggestion-card img {
+    border-radius: 50%;
+}
+
+.suggestion-card .suggested-user * {
+    margin: 0;
+    padding: 5px;
+}
+
+.suggestion-card .suggested-username {
+    font-weight: bold;
+}
+
+.suggested-for-you {
+    color: rgb(70, 70, 70);
+    font-size: 14px;
+}
+
 main {
     /* margin-top: 70px; */
     width: 60vw;
@@ -246,6 +291,128 @@ aside header .pic {
 }
 .visuallyhidden {
     display: none;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+.post-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-header * {
+    display: inline;
+    padding: 10px;
+}
+
+.post-body {
+    padding: 10px;
+}
+
+.post-footer {
+    border-top: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.post-footer-comment {
+    display: flex;
+    /* width: 500px; */
+}
+
+.post-footer input[type="text"] {
+    /* width: 100%; */
+    border: hidden;
+}
+
+.post-comment-button {
+    text-decoration: none;
+}
+
+#current-user, #top-nav, .post-header {
+    font-family: 'Comfortaa', sans-serif;
+}
+
+.modal-bg {
+    background: rgba(50, 50, 50, 0.8);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    color: #fff;
+    border: 0;
+    font-size: 2em;
+}
+
+.modal {
+    width: 60vw;
+    height: auto;
+    max-height: 80vh;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    overflow-y: scroll;
+}
+
+/* .modal * {
+    display: inline-block;
+} */
+
+.modal img {
+    height: 100%;
+    /* float: left; */
+    background-size: cover;
+}
+
+.modal-left {
+    /* float: right; */
+    /* overflow-y: hidden; */
+}
+
+.hidden {
+    display: none !important;
+}
+
+.modal-body {
+    overflow-y: auto;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    align-content: flex-start;
+    padding: 10px;
+    align-items: center;
+    border-bottom: solid 1px #CCC;
 }
 
 @media (max-width: 900px) {

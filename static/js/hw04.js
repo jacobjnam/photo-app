@@ -17,16 +17,66 @@ const profile2Html = current_user => {
 };
 
 const renderFollowUserButton = suggested_user => {
+    // const followButton = ev.currentTarget;
     return `
         <button
             aria-label="Follow / Unfollow"
             aria-checked="false"
-            onclick="followUser(event);">
+            data-following-id="None"
+            data-user-id="${suggested_user.id}"
+            onclick="handleFollow(event);">
             follow
         </button>`;
 };
 
+const handleFollow = ev => {
+    const followButton = ev.currentTarget;
+    const userId = Number(followButton.dataset.userId);
+    if (followButton.getAttribute('aria-checked') === 'true') {
+        console.log('unfollow user');
+        fetch(`/api/following/${followButton.dataset.followingId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                // 'X-CSRF-TOKEN': getCookie('csrf_access_token')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // here is where we ask to redraw the button
+            // redrawPost(postId);
+            followButton.innerHTML = 'follow';
+        })
+        followButton.setAttribute('aria-checked', 'false');
+    }
+    else {
+        console.log('follow user');
+        const postData = {
+            "user_id": userId
+        };
+        fetch(`/api/following`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                // 'X-CSRF-TOKEN': getCookie('csrf_access_token')
+            },
+            body: JSON.stringify(postData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // here is where we ask to redraw the post
+            // redrawPost(postId);
+            followButton.setAttribute('data-following-id', data.id);
+            followButton.innerHTML = 'unfollow';
+        });
+        followButton.setAttribute('aria-checked', 'true');
+    }
+}
+
 const suggestion2Html = suggestion => {
+    // <button onclick="followUser(${suggestion});">follow</button>
     return `
         <div class="suggestion-card">
             <img src="${ suggestion.thumb_url }" alt="${ suggestion.username }'s profile picture">
@@ -35,7 +85,6 @@ const suggestion2Html = suggestion => {
                 <p class="suggested-for-you"> suggested for you</p>
             </div>
             ${ renderFollowUserButton(suggestion) }
-            <button onclick="followUser(${suggestion});">follow</button>
         </div>
     `;
 };
@@ -86,21 +135,43 @@ const renderBookmarkPost = post => {
     }
 };
 
-const renderComments = post => {
+const renderComments = (post, isModal) => {
     var comment = ``;
-    if (post.comments.length > 1) {
-        comment += `<button href="" class="view-all-comments" onclick="showAllComments(event);">View all ${ post.comments.length } comments</button>`;
+    if (isModal) {
+        for (let ii = 0; ii < post.comments.length; ii++) {
+            comment += `
+                <div class="post-comment">
+                    <p><b>${ post.comments[ii].user.username }</b> ${ post.comments[ii].text }</p>
+                </div>
+            `;
+        }
     }
-    if (post.comments.length > 0) {
-        comment += `
-            <div class="post-comment">
-                <p><b>${ post.comments[post.comments.length-1].user.username }</b> ${ post.comments[post.comments.length-1].text }</p>
-            </div>
-        `;
+    else {
+        if (post.comments.length > 1) {
+            comment += `<button data-post-id=${post.id} class="view-all-comments" onclick="showModal(event);">View all ${ post.comments.length } comments</button>`;
+        }
+        if (post.comments.length > 0) {
+            comment += `
+                <div class="post-comment">
+                    <p><b>${ post.comments[post.comments.length-1].user.username }</b> ${ post.comments[post.comments.length-1].text }</p>
+                </div>
+            `;
+        }
     }
 
     return comment;
 };
+
+const showModal = ev => {
+    const postId = Number(ev.currentTarget.dataset.postId);
+
+    redrawPost(postId, post => {
+        const html = post2Modal(post);
+        document.querySelector(`#post_${postId}`).insertAdjacentHTML('beforeend', html);
+        document.body.style.overflow = 'hidden';
+        document.querySelector('.close-modal').focus();
+    })
+}
 
 const addComment = (postId, text) => {
     // console.log("add comment");
@@ -119,7 +190,9 @@ const addComment = (postId, text) => {
         .then(data => {
             console.log(data);
             redrawPost(postId);
+            document.querySelector(`#add_comment_${postId}`).focus();
         });
+    // document.querySelector(`#add_comment_${postId}`).focus();
 };
 
 const post2Html = post => {
@@ -146,13 +219,13 @@ const post2Html = post => {
                 <!-- USERNAME, CAPTION, "more" BUTTON HERE -->
                 <p><b>${ post.user.username }</b> ${ post.caption }... <!-- <a class="expand-text" href="">more</a></p> -->
             </div>
-            ${ renderComments(post) }
+            ${ renderComments(post, false) }
             <p class="post-date">${ post.display_time }</p>
         </div>
         <div class="post-footer">
             <div class="post-footer-comment">
                 <button><i class="far fa-smile"></i></button>
-                <input type="text" placeholder="Add a comment..." id="add_comment_${post.id}"></p>
+                <input type="text" placeholder="Add a comment..." id="add_comment_${post.id}"></input>
             </div>
             <button class="post-comment-button" id="post_comment_${post.id}" onclick="addComment(${post.id}, document.getElementById('add_comment_${post.id}').value);">Post</button>
         </div>
@@ -166,16 +239,25 @@ const stringToHTML = htmlString => {
     return doc.body.firstChild;
 }
 
-const redrawPost = postId => {
+const redrawPost = (postId, callback) => {
     fetch(`/api/posts/${postId}`)
         .then(response => response.json())
         .then(updatedPost => {
-            const html = post2Html(updatedPost);
-            const postHTML = stringToHTML(html);
-            const postElement = document.querySelector(`#post_${postId}`);
-            postElement.innerHTML = postHTML.innerHTML;
+            if (!callback) {
+                redrawCard(updatedPost);
+            }
+            else {
+                callback(updatedPost);
+            }
         })
 };
+
+const redrawCard = post => {
+    const html = post2Html(post);
+    const postHTML = stringToHTML(html);
+    const postElement = document.querySelector(`#post_${post.id}`);
+    postElement.innerHTML = postHTML.innerHTML;
+}
 
 const handleLike = ev => {
     // if aria-checked == 'true': delete Like object
@@ -189,7 +271,7 @@ const handleLike = ev => {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': getCookie('csrf_access_token')
+                // 'X-CSRF-TOKEN': getCookie('csrf_access_token')
             }
         })
         .then(response => response.json())
@@ -209,7 +291,7 @@ const handleLike = ev => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': getCookie('csrf_access_token')
+                // 'X-CSRF-TOKEN': getCookie('csrf_access_token')
             },
             body: JSON.stringify(postData)
         })
@@ -269,26 +351,32 @@ const handleBookmark = ev => {
     }
 };
 
-// fetch data from your API endpoint:
-const getCookie = key => {
-    let name = key + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    console.log(decodedCookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        console.log(c);
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+const post2Modal = post => {
+    return `<div class="modal-bg" aria-hidden="false" role="dialog">
+                <button class="close-modal" aria-label="Close the modal window" onclick="closeModal(event)";><i class="fas fa-times"></i></button>
+                <section class="modal">
+                    <img class="modal-left" src="${post.image_url}">
+                    <section class="modal-left">
+                        <div id="user-profile">
+                            <img src="${ post.user.thumb_url }" alt="Current user profile picture">
+                            <h2>${ post.user.username }</h2>
+                        </div>
+                        <div class="modal-comments">
+                            ${renderComments(post, true)}
+                        </div>
+                    </section>
+                </section>
+            </div>`;
 };
 
+const closeModal = ev => {
+    console.log("close modal");
+    document.querySelector('.modal-bg').remove();
+    document.body.style.overflow = 'auto';
+    document.querySelector('.view-all-comments').focus();
+}
 
+// fetch data from your API endpoint:
 const displayStories = () => {
     fetch('/api/stories', {
         method: "GET",
@@ -359,3 +447,12 @@ const initPage = () => {
 
 // invoke init page to display stories:
 initPage();
+
+document.addEventListener("keydown", ({key}) => {
+    if (key === "Escape") {
+        var modal = document.querySelector(".modal-bg");
+        if (modal) {
+            closeModal();
+        }
+    }
+});
