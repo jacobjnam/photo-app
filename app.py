@@ -9,8 +9,14 @@ import os
 from models import db, User, ApiNavigator
 from views import initialize_routes
 import decorators
+from flask_multistatic import MultiStaticFlask as Flask
+from flask import send_from_directory
 
 app = Flask(__name__)
+app.static_folder = [
+    os.path.join(app.root_path, 'react-client', 'build', 'static'),
+    os.path.join(app.root_path, 'static')
+]
 cors = CORS(app, 
     resources={r"/api/*": {"origins": '*'}}, 
     supports_credentials=True
@@ -53,10 +59,11 @@ initialize_routes(api)
 @app.route('/')
 @decorators.jwt_or_login
 def home():
-    return render_template(
-        'starter-client.html', 
-        user=flask_jwt_extended.current_user
-    )
+    # return render_template(
+    #     'starter-client.html', 
+    #     user=flask_jwt_extended.current_user
+    # )
+    return send_from_directory(app.root_path + '/react-client/build', 'index.html')
 
 @app.route('/api')
 @app.route('/api/')

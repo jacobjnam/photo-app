@@ -1,0 +1,10 @@
+Were React's compilation warning/error messages helpful?
+While some of the compilation warning/error messages were helpful, some of them were not. While debugging, it was quite easy to figure out what part of my code was broken since the traceback and line references were given. However, there were also some redundant/not as useful messages, such as "Redundant alt attribute" or "expected a return value from arrow function".
+
+Did React's compilation warning/error messages prompt you to consider making your site more accessible?
+There were some messages that reminded me to include an "alt" prop for certain elements, which helped me to make my site more accessible.
+
+Did you consider conducting accessibility testing on your lab assignment? Why or why not?
+I only considered using the WAVE extension to test for acceptable contrast. However, since I already used it on previous assignments and kept the same styling, I did not conduct further testing.
+
+If you tested your site for accessibility and found issues, were you able to solve them? What did you do to try to solve them? What stopped you from successfully resolving or trying to resolve the issues?
